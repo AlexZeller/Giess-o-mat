@@ -4,7 +4,7 @@ import sys
 
 class MCP3008:
     """ 
-    Class to read read the Channels of the MCP3008 Analog-to-Digital Converter
+    Class to read the Channels of the MCP3008 Analog-to-Digital Converter
 
     Attributes: 
         bus (int): The number of the SPI bus that is used. 

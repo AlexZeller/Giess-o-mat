@@ -1,9 +1,26 @@
+import sys
 import RPi.GPIO as GPIO
 import time
 import math
 
-class Distanz:
+class HC-SR04:
+    """
+    Class to read the sensor values (ultrasonic) from HC-SR04.
+
+    Attributes:
+        gpio_trigger (int): Number of GPIO Pin which triggers the ultrasonic signal.
+        gpio_echo (int): Number of GPIO Pin which receives the ultrasonic signal.
+    """
+
     def __init__(self, gpio_trigger, gpio_echo):
+        """
+        The constructor for the HC-SR04 class.
+        
+        Arguments:
+            gpio_trigger (int): Number of GPIO Pin which triggers the ultrasonic signal.
+            gpio_echo (int): Number of GPIO Pin which receives the ultrasonic signal.
+        """
+
         self.gpio_trigger = gpio_trigger
         self.gpio_echo = gpio_echo
 
@@ -14,7 +31,12 @@ class Distanz:
         GPIO.setup(gpio_trigger, GPIO.OUT)
         GPIO.setup(gpio_echo, GPIO.IN)
 
-    def get_distanz(self):
+    def get_distance(self):
+        """
+        Calculates the distance to the next object based on time difference
+        between sender and receiver.
+        """
+
         # Set trigger to HIGH
         GPIO.output(self.gpio_trigger, True)
     
@@ -39,3 +61,13 @@ class Distanz:
         distance = (TimeElapsed * 34300) / 2
     
         return distance
+
+if __name__ == "__main__":
+    try:
+        gpio_trigger = sys.argv[1]
+        gpio_echo = sys.argv[2]
+
+        hc-sr04 = HC-SR04(gpio_trigger, gpio_echo)
+        print('Distance: ', hc-sr04.get_distance())
+    except:
+        print('Something did not work with HC-SR04.')
