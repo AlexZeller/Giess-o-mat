@@ -60,7 +60,7 @@ if __name__ == "__main__":
         while True:
             adc = MCP3008()
             value = adc.convert_to_volts(int(adc.read_channel(int(channel))),4)
-            print('{0:>4}V'.format(value))
+            print('{0:>4} V'.format(value))
             sleep(0.5)
     except KeyboardInterrupt:
         print('Stopped reading')
