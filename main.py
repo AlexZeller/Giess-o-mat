@@ -1,20 +1,16 @@
-#!/usr/bin/env python2
-###############################################################################
 import datetime
-
 from giessomat import Relais, DHT22, MCP3008
 # MCp3008 Ch:0 = Bodenfeuchte; Ch:1 = Fotowiederstand
+
 # Get current temperature and humidity
 dht22 = DHT22.DHT22(4)
 Ta = dht22.get_temperature()
 RH = dht22.get_humidity()
-# Set thresholds
-# soil humidity
-soilH_min = 30
-# maximum air temperature
-Ta_max = 30
-# maximum air humidity
-RH_max = 80
+
+# Set sensor thresholds
+soilH_min = 30 # soil humidity
+Ta_max = 30 # maximum air temperature
+RH_max = 80 # maximum air humidity
 
 # Set start and end time of lightning
 start_hour = 7
