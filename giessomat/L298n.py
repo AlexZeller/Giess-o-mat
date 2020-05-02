@@ -41,10 +41,10 @@ class L298n:
         Arguments: 
             percentage (int): The fan speed to bet set.
         """
-
-        GPIO.output(self.in1,GPIO.LOW)
-        GPIO.output(self.in2,GPIO.HIGH)
-        self.pwm.ChangeDutyCycle(percentage)
+        while True:
+            GPIO.output(self.in1,GPIO.LOW)
+            GPIO.output(self.in2,GPIO.HIGH)
+            self.pwm.ChangeDutyCycle(percentage)
 
     def stop(self):
         """ 
