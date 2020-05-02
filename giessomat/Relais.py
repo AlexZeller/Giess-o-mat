@@ -27,7 +27,7 @@ class Relais:
         """
 
         GPIO.output(self.gpio_pin, GPIO.LOW)
-        self.status = "on" 
+        self.status = "on"
 
     def off(self):
         """ 
@@ -36,10 +36,9 @@ class Relais:
 
         GPIO.output(self.gpio_pin, GPIO.HIGH) 
         self.status = "off"
-        GPIO.cleanup()
+        #GPIO.cleanup()
 
 if __name__ == "__main__":
-
     try:
         gpio_pin = sys.argv[1]
         status = sys.argv[2]
@@ -51,4 +50,5 @@ if __name__ == "__main__":
         if status == 'off':
             relais.off()
             print('Switched Relais on pin {} from NO to NC'.format(gpio_pin))
-
+    except:
+        pass
