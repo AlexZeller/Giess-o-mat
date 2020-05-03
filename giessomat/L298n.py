@@ -30,8 +30,8 @@ class L298n:
         GPIO.setup(self.ena,GPIO.OUT) 
         GPIO.output(self.in1,GPIO.LOW)
         GPIO.output(self.in2,GPIO.LOW)
-        self.pwm=GPIO.PWM(self.ena,1000)
-        self.pwm.start(0)
+        self.pwm=GPIO.PWM(self.ena,5000)
+        #self.pwm.start(0)
        
 
     def run(self, percentage):
@@ -42,9 +42,10 @@ class L298n:
             percentage (int): The fan speed to bet set.
         """
         while True:
-            GPIO.output(self.in1,GPIO.LOW)
-            GPIO.output(self.in2,GPIO.HIGH)
-            self.pwm.ChangeDutyCycle(percentage)
+            GPIO.output(self.in1,GPIO.HIGH)
+            GPIO.output(self.in2,GPIO.LOW)
+            self.pwm.start(percentage)
+            #self.pwm.ChangeDutyCycle(percentage)
 
     def stop(self):
         """ 
@@ -56,9 +57,9 @@ class L298n:
 if __name__ == "__main__":
 
     try:
-        in1_pin = 24
-        in2_pin = 23
-        ena_pin = 25
+        in1_pin = 21
+        in2_pin = 26
+        ena_pin = 20
         status = sys.argv[1]
         try:
             percentage = int(sys.argv[2])
@@ -68,10 +69,10 @@ if __name__ == "__main__":
         l298 = L298n(in1_pin, in2_pin, ena_pin)
     
         if status == 'run':
-            while True:
-                l298.run(percentage)
+            l298.run(percentage)
         if status == 'stop':
             l298.stop()
 
     except KeyboardInterrupt:
         print('Stopped')
+        GPIO.cleanup()

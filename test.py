@@ -1,7 +1,14 @@
 ########### This is a temporary test file. Can be overwritten at any point #########
+from time import sleep
+import subprocess
+import os
+import signal
 
-from giessomat import L298n
+fan = subprocess.Popen(['python', '/home/pi/Giess-o-mat/giessomat/L298n.py', 'run', '10'])
+fan_id = fan.pid
+print fan_id
+sleep(10)
 
-fan = L298n.L298n(24, 23, 25)
 
-fan.run(50)
+subprocess.call(['python', '/home/pi/Giess-o-mat/giessomat/L298n.py', 'stop'])
+os.kill(fan_id, signal.SIGTERM)
