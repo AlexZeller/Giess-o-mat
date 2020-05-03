@@ -1,9 +1,10 @@
-import RPi.GPIO as GPIO          
+import RPi.GPIO as GPIO
 import sys
+
 
 class L298n:
     """ 
-    Class to control two channels of a L298n Motor Module for fan speed control
+    Class to control two channels of a L298n Motor Module 
     Attributes: 
         in1 (int): The number of IN1 Pin. 
         in2 (int): The number of IN2 Pin.   
@@ -14,7 +15,7 @@ class L298n:
     def __init__(self, in1_pin, in2_pin, ena_pin):
         """ 
         The constructor for the L298n class. 
-          
+
         Arguments: 
             in1 (int): The number of IN1 Pin. 
             in2 (int): The number of IN2 Pin.   
@@ -25,36 +26,37 @@ class L298n:
         self.in2 = in2_pin
         self.ena = ena_pin
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.in1,GPIO.OUT)
-        GPIO.setup(self.in2,GPIO.OUT)
-        GPIO.setup(self.ena,GPIO.OUT) 
-        GPIO.output(self.in1,GPIO.LOW)
-        GPIO.output(self.in2,GPIO.LOW)
-        self.pwm=GPIO.PWM(self.ena,5000)
-        #self.pwm.start(0)
-       
+        GPIO.setup(self.in1, GPIO.OUT)
+        GPIO.setup(self.in2, GPIO.OUT)
+        GPIO.setup(self.ena, GPIO.OUT)
+        GPIO.output(self.in1, GPIO.LOW)
+        GPIO.output(self.in2, GPIO.LOW)
+        self.pwm = GPIO.PWM(self.ena, 5000)
 
     def run(self, percentage):
         """ 
-        Set the GPIO Pins to run the fans and control the speed. 
-        
+        Set the GPIO Pins to run the dc motor and control the speed. 
+
         Arguments: 
-            percentage (int): The fan speed to bet set.
+            percentage (int): The pwm duty cycle in percent.
         """
         while True:
-            GPIO.output(self.in1,GPIO.HIGH)
-            GPIO.output(self.in2,GPIO.LOW)
+            GPIO.output(self.in1, GPIO.HIGH)
+            GPIO.output(self.in2, GPIO.LOW)
             self.pwm.start(percentage)
-            #self.pwm.ChangeDutyCycle(percentage)
 
     def stop(self):
         """ 
-        Stop the fans. (GPIO.cleanup())
+        Stop the motor. (GPIO.cleanup())
         """
 
         GPIO.cleanup()
 
+
 if __name__ == "__main__":
+
+    # This main function will be called as a subprocess by the Fans module
+    # The pins have to be set accordingly
 
     try:
         in1_pin = 21
@@ -67,7 +69,7 @@ if __name__ == "__main__":
             pass
 
         l298 = L298n(in1_pin, in2_pin, ena_pin)
-    
+
         if status == 'run':
             l298.run(percentage)
         if status == 'stop':
