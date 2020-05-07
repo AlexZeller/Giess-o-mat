@@ -139,8 +139,8 @@ def irrigation_auto(soilH, soilH_min, GPIO1, GPIO2):
 
 
 if __name__ == '__main__':
-    #light_time(start_time, end_time)
-    light_time_light(start_time, end_time, lux_threshold)
+    light_time(start_time, end_time)
+    #light_time_light(start_time, end_time, lux_threshold)
     ventilation_auto(Ta, RH, Ta_max, RH_max)
     #ventilation_set([[21, 45], [22,0]], GPIO=18)
     
