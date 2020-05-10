@@ -1,9 +1,9 @@
 import datetime
 from giessomat import Relais, DHT22, MCP3008, Photoresistor
-# MCp3008 Ch:0 = Bodenfeuchte; Ch:1 = Fotowiederstand
+# MCp3008 Ch:0 = Bodenfeuchte; Ch:2 = Fotowiederstand
 
 # Get current temperature and humidity
-dht22 = DHT22.DHT22(4)
+dht22 = DHT22.DHT22(17)
 Ta = dht22.get_temperature()
 RH = dht22.get_humidity()
 
@@ -23,7 +23,7 @@ start_time = int(start_hour)*60 + int(start_minute)
 end_time = int(end_hour)*60 + int(end_minute)
 
 ############################################################################
-def light_time(start, end, GPIO=17):
+def light_time(start, end, GPIO=24):
     """
     Depending of the current time the light is switched on (start < current
     time < end )or off (start > current time, stop < current time).
@@ -41,7 +41,7 @@ def light_time(start, end, GPIO=17):
         light.off()
 
 
-def light_time_light(start, end, lux_threshold, GPIO=17, channel=1):
+def light_time_light(start, end, lux_threshold, GPIO=24, channel=2):
     """
     Depending of the current time and the current lux_value the light is
     switched on (start < current time < end AND lux_value < lux threshold) or
@@ -67,7 +67,7 @@ def light_time_light(start, end, lux_threshold, GPIO=17, channel=1):
         light.off()
 
 
-def ventilation_set(times, GPIO=18):
+def ventilation_set(times, GPIO=23):
     """
     Ventilation is executed at specific times.
     
@@ -92,7 +92,7 @@ def ventilation_set(times, GPIO=18):
 
 
 
-def ventilation_auto(Ta, RH, Ta_max, RH_max, GPIO=18):
+def ventilation_auto(Ta, RH, Ta_max, RH_max, GPIO=23):
     """
     Compares Ta with Ta_max and RH with RH_max. If statement is true/false
     ventilation starts/stops.
