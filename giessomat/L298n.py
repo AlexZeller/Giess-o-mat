@@ -60,8 +60,8 @@ if __name__ == "__main__":
 
     try:
         in1_pin = 21
-        in2_pin = 20
-        ena_pin = 26
+        in2_pin = 26
+        ena_pin = 20
         status = sys.argv[1]
         try:
             percentage = int(sys.argv[2])

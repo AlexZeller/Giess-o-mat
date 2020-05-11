@@ -1,0 +1,20 @@
+L298n:
+    IN1 = 21
+    IN2 = 26
+    ENA = 20
+
+Relais:
+    IN1 = 23
+    IN2 = 24
+    IN3 = 25
+    IN4 = 16
+
+DHT22:
+   Data = 17
+
+HC-SR04:
+    ECHO = 12
+    TRIG = 18
+
+
+

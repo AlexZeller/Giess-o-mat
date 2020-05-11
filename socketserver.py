@@ -1,6 +1,11 @@
+from giessomat import Relais
+from giessomat import Fans
 import eventlet
 import socketio
-from giessomat import Relais
+<< << << < HEAD
+
+eventlet.monkey_patch()
+
 
 #path_json = '/home/pi/Giess-o-mat/giessomat/processes.json'
 #path_l298n = '/home/pi/Giess-o-mat/giessomat/L298n.py'
@@ -11,19 +16,21 @@ relais_fan = Relais.Relais(18)
 
 #fans = Fans.Fans(path_l298n, path_json)
 
+mgr = socketio.KombuManager('amqp://')
+sio = socketio.Server(cors_allowed_origins=[
+                      'http://localhost:5672', 'http://192.168.0.134:8080', 'http://192.168.0.235'], client_manager=mgr)
 
-sio = socketio.Server(cors_allowed_origins='*')
+#sio = socketio.Server(cors_allowed_origins='*')
 app = socketio.WSGIApp(sio)
 
 
 @sio.event
 def connect(sid, environ):
     print('connect', sid)
-    sio.emit('message', 'Test')
 
 
-#@sio.event
-#def fan(sid, data):
+# @sio.event
+# def fan(sid, data):
 #    if data == True:
 #        fans.start_fans(50)
 #       print('started fans')
@@ -39,6 +46,7 @@ def light(sid, data):
         print(data)
         relais_light.off()
 
+
 @sio.event
 def fan(sid, data):
     if data == True:
@@ -47,6 +55,12 @@ def fan(sid, data):
     if data == False:
         print(data)
         relais_fan.off()
+
+
+@sio.event
+def test(sid, data):
+    print('test')
+    sio.emit('fan', True)
 
 
 @sio.event

@@ -1,0 +1,4 @@
+
+sudo apt-get install rabbitmq-server
+pip install kombu
+sudo systemctl status rabbitmq-server.service

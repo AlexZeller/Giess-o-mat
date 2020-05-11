@@ -1,14 +1,14 @@
 ########### This is a temporary test file. Can be overwritten at any point #########
-from time import sleep
-import subprocess
-import os
-import signal
+import socketio
+from giessomat import Fans
 
-fan = subprocess.Popen(['python', '/home/pi/Giess-o-mat/giessomat/L298n.py', 'run', '10'])
-fan_id = fan.pid
-print fan_id
-sleep(10)
+path_json = '/home/pi/Giess-o-mat/giessomat/processes.json'
+path_l298n = '/home/pi/Giess-o-mat/giessomat/L298n.py'
 
+mgr = socketio.KombuManager('amqp://')
+sio = socketio.Server(client_manager=mgr)
 
-subprocess.call(['python', '/home/pi/Giess-o-mat/giessomat/L298n.py', 'stop'])
-os.kill(fan_id, signal.SIGTERM)
+fans = Fans.Fans(path_l298n, path_json)
+
+fans.stop_fans()
+sio.emit('fan', False)
