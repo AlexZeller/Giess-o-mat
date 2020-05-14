@@ -14,9 +14,9 @@ RH_max = 70 # maximum air humidity
 lux_threshold = 5000 # minimum lux value
 
 # Set start and end time of lightning
-start_hour = 7
+start_hour = 6
 start_minute = 0
-end_hour = 21
+end_hour = 22
 end_minute = 00
 # Calculate start and end time in minutes
 start_time = int(start_hour)*60 + int(start_minute)
@@ -126,7 +126,7 @@ def irrigation_auto(soilH, soilH_min, GPIO1, GPIO2):
         GPIO2: GPIO pin used to switch Relais for valve control.
     """
 
-    # Pump GPIO = 
+    # Pumpe GPIO = 25, Ventil = 16
     pump = Relais.Relais(GPIO1)
     # Valve GPIO = 
     valve = Relais.Relais(GPIO2)
