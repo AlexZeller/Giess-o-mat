@@ -1,5 +1,5 @@
 from giessomat import Database
-from giessomat import DHT22, HCSR04
+from giessomat import DHT22, HCSR04, DC18B20
 #MCP3008, Photoresistor 
 
 def get_sensordata(volume_cal_value, gpios_hcsr04 = [18, 12], gpio_dht22 = 17):
@@ -21,7 +21,8 @@ def get_sensordata(volume_cal_value, gpios_hcsr04 = [18, 12], gpio_dht22 = 17):
     RH = dht22.get_humidity()
     
     # Sensor value from DC18B20(soil temperature)
-    soil_temp = 9999
+    dc18b20 = DC18B20.DC18B20()
+    soil_temp = dc18b20.get_temperature()
     
     # Sensor value from MCP3008 channel X (soil humidity)
     soil_humid = 9999
@@ -42,8 +43,9 @@ def sensordata2database(dbPath, sensordata):
 
     Arguments:
         dbPath (str): Path to database.
-        sensordata (tuple): Ta , RH, soil_temp, soil_humid, lux, waterlevel
+        sensordata (tuple): Order of the input values: Ta , RH, soil_temp, soil_humid, lux, waterlevel.
     """
+
     database = Database.Database(dbPath)
     sql = "INSERT INTO sensor_data VALUES (NULL, ?, ?, ?, ?, ?, ?);"
     database.executeSQL(sql, sensordata)
