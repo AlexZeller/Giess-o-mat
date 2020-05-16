@@ -1,0 +1,11 @@
+{
+ "light": {
+     "auto": false,
+     "start_hour": 7,
+     "start_min": 0,
+     "end_houe": 22,
+     "end_min": 0,
+     "lux_threshold": 5000
+ }
+
+}

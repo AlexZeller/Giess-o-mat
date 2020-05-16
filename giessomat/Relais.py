@@ -52,7 +52,6 @@ class Relais:
         return relais_status
 
 
-
 if __name__ == "__main__":
     try:
         gpio_pin = sys.argv[1]
