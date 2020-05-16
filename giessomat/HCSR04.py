@@ -72,7 +72,7 @@ class HCSR04:
         Returns the left volume in the container in percent.
         """
         distance = self.get_distance()
-        p = 100 -(distance*self.cal_value)
+        p = round(100 -(distance*self.cal_value),2)
         return p
 
 

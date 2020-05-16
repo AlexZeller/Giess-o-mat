@@ -17,17 +17,18 @@ class Relais:
             gpio_pin (int): The number the GPIO Pin to control the Relais.  
         """
         self.gpio_pin = gpio_pin
-        self.status = None
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(gpio_pin, GPIO.OUT)
 
+    
     def on(self):
         """ 
         Switches the Relais from NC to NO. 
         """
 
         GPIO.output(self.gpio_pin, GPIO.LOW)
-        self.status = "on"
+        self.status = True
+
 
     def off(self):
         """ 
@@ -35,8 +36,22 @@ class Relais:
         """
 
         GPIO.output(self.gpio_pin, GPIO.HIGH) 
-        self.status = "off"
+        self.status = False
         #GPIO.cleanup()
+
+    def get_status(self):
+        """ 
+        Get status of Relais. 
+        """
+
+        gpio_status = GPIO.input(self.gpio_pin)
+        if gpio_status == 0:
+            relais_status = True
+        if gpio_status == 1:
+            relais_status = False
+        return relais_status
+
+
 
 if __name__ == "__main__":
     try:

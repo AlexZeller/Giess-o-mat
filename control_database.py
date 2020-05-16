@@ -47,14 +47,15 @@ def sensordata2database(dbPath, sensordata):
     """
 
     database = Database.Database(dbPath)
-    sql = "INSERT INTO sensor_data VALUES (NULL, ?, ?, ?, ?, ?, ?);"
+    sql = "INSERT INTO sensor_data (air_temp, air_humid, soil_temp, soil_humid, lux, waterlevel) VALUES (?, ?, ?, ?, ?, ?);"
     database.executeSQL(sql, sensordata)
 
 
 if __name__ == "__main__":
     try:
-        sensordata = get_sensordata(volume_cal_value=1.73913)
+        sensordata = get_sensordata(volume_cal_value=1.763668430335097)
         # sensordata: Ta, RH, soil_temp, soil_humid, lux, waterlevel
         sensordata2database('/home/pi/Giess-o-mat/giessomat_db.db', sensordata)
     except:
+        raise
         pass
