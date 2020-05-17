@@ -3,26 +3,19 @@ import json
 import sys
 from giessomat import Relais, Photoresistor
 
-# Load settings
-#settings = json.loads('/home/pi/Giess-o-mat/user_settings.json')
-#print('settings', settings)
-
-# Set start and end time of lightning
-start_hour = 6
-start_minute = 0
-end_hour = 22
-end_minute = 00
-# Calculate start and end time in minutes
-start_time = int(start_hour)*60 + int(start_minute)
-end_time = int(end_hour)*60 + int(end_minute)
 
 def read_json(path_json, key):
     """
-    EXPLANATION
+    Takes a path to json file and a key value and return all elements using this key.
+
+    Arguments:
+        path_json (str): Path to json file.
+        key (str): Key for which all values will be returned.
     """
-    with open(path_json, 'r+') as s:
+
+    with open(path_json) as s:
         settings = json.load(s)
-        print(settings[key])
+    return(settings[key])
 
 def light_time(start, end, GPIO=23):
     """
@@ -42,7 +35,7 @@ def light_time(start, end, GPIO=23):
         light.off()
 
 
-def light_time_light(start, end, lux_threshold, GPIO=23, channel=2):
+def light_time_sensor(start, end, lux_threshold, GPIO=23, channel=2):
     """
     Depending of the current time and the current lux_value the light is
     switched on (start < current time < end AND lux_value < lux threshold) or
@@ -69,6 +62,24 @@ def light_time_light(start, end, lux_threshold, GPIO=23, channel=2):
 
 
 if __name__ == '__main__':
-    json_path = sys.argv[1]
-    read_json(json_path)
-    #light_time(start_time, end_time)
+    # Open JSON seetings file
+    json_path = '/home/pi/Giess-o-mat/user_settings.json'
+    light_settings = read_json(json_path, 'light')
+
+    # Write settinsg to variables
+    if light_settings['auto'] == False:
+        start_hour = light_settings['start_hour']
+        start_minute = light_settings['start_min']
+        end_hour = light_settings['end_hour']
+        end_minute = light_settings['end_min']
+        # Calculate start and end time in minutes
+        start_time = int(start_hour)*60 + int(start_minute)
+        end_time = int(end_hour)*60 + int(end_minute)
+        print(start_time, end_time)
+        if light_settings['mode'] == 'time_sensor_control':
+            lux_threshold = light_settings['lux_threshold']
+            # Call function for execution
+            light_time_sensor(start_time, end_time, lux_threshold)
+        else:
+            # Call function for execution
+            light_time(start_time, end_time)
