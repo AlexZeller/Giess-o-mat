@@ -7,6 +7,22 @@
      "end_hour": 22,
      "end_min": 0,
      "lux_threshold": 5000
- }
+ },
 
+ "ventilation": {
+     "auto": false,
+     "mode_sensor": "Ta",
+     "mode_times": "false",
+     "mode_time_window": "false",
+     "Ta_max": 30,
+     "RH_max": 60,
+     "start_hour": "None",
+     "start_min": "None",
+     "end_hour": "None",
+     "end_min": "None"
+ },
+
+ "irrigation": {
+     "auto": false
+ }
 }

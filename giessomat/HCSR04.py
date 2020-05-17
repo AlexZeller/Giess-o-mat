@@ -13,16 +13,19 @@ class HCSR04:
         gpio_echo (int): Number of GPIO Pin which receives the ultrasonic signal.
     """
 
-    def __init__(self, gpio_trigger, gpio_echo, cal_value):
+    def __init__(self, gpio_trigger, gpio_echo, val0p=56.5, val1d=2):
         """
         The constructor for the HC-SR04 class.
 
         Arguments:
             gpio_trigger (int): Number of GPIO Pin which triggers the ultrasonic signal.
             gpio_echo (int): Number of GPIO Pin which receives the ultrasonic signal.
-            cal_value (int): Calibration value in cm which is equal to 1 %.
-                pipe solution: 1.73913 cm equals 1 %
+            val0p (int): Calibration value in cm which is equal to 0 %.
+                pipe solution: 56.5 cm equals 1 %
                 box solution: X cm equals 1 %.
+            val1d (int): Calibration value in percent which equals 1 cm.
+                pipe solution: 1 cm equals 2 %
+                box solution: 1 equals X %
         """
 
         self.gpio_trigger = gpio_trigger
@@ -72,7 +75,7 @@ class HCSR04:
         Returns the left volume in the container in percent.
         """
         distance = self.get_distance()
-        p = round(100 -(distance*self.cal_value),2)
+        p = round((val0p - distance)*val1d, 2)
         return p
 
 
