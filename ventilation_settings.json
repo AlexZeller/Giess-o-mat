@@ -1,0 +1,9 @@
+{
+     "auto": true,
+     "mode": "Lufttemperatur- und Luftfeuchtesteuerung",
+     "Ta_max": 30,
+     "RH_max": 60,
+     "mode_ventilation_stop": true,
+     "start_time": "07:00",
+     "end_time": "21:00"
+ }

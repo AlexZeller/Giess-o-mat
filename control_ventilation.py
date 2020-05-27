@@ -1,35 +1,19 @@
 import datetime
 from giessomat import Relais, DHT22
 
-# Ventilation mode_sensor:
-    # Values  
-        # "Ta" >  Ta controlled 
-        # "RH" > RH controlled
-        # "TaRH" > Ta and RH controlled
-# Ventilation mode_times:
-    # Values
-        # "true" > always set at specific times
-        # "false" > Not considered
-# Ventilation mode_time_window (not yet implemented):
-    # Values
-        # "true" > just within time window
-        # "false" > Not considered
 
-# Set start and end time of ventilation
-start_hour = 6
-start_minute = 0
-end_hour = 22
-end_minute = 00
+def read_json(path_json):
+    """
+    Takes a path to json file and returns json data as dictionary.
 
-# Calculate start and end time in minutes
-start_time = int(start_hour)*60 + int(start_minute)
-end_time = int(end_hour)*60 + int(end_minute)
+    Arguments:
+        path_json (str): Path to json file.
+    """
 
-# Set sensor thresholds
-soilH_min = 30 # soil humidity
-Ta_max = 30 # maximum air temperature
-RH_max = 70 # maximum air humidity
-lux_threshold = 5000 # minimum lux value
+    with open(path_json) as s:
+        settings = json.load(s)
+    return(settings)
+
 
 def vent_at_times(times, GPIO=24):
     """
@@ -116,52 +100,45 @@ def vent_RH(RH, RH_max, GPIO=24):
 if __name__ == '__main__':
     # Open JSON seetings file
     json_path = '/home/pi/Giess-o-mat/user_settings.json'
-    ventilation_settings = read_json(json_path, 'ventilation')
+    ventilation_settings = read_json(json_path)
 
     # Write settinsg to variables
-    if ventilation_settings['auto'] == False:
-        if ventilation_settings['mode_sensor'] == 'Ta':
-            # Get Ta from senor
-            dht22 = DHT22.DHT22()
-            Ta = dht22.get_temperature()
-            # Get Ta threshold
-            Ta_max = ventilation_settings['Ta_max']
-            # Call function
-            vent_Ta(Ta, Ta_max)
-        elif ventilation_settings['mode_sensor'] == 'RH':
-            # Get RH from senor
-            dht22 = DHT22.DHT22()
-            RH = dht22.get_humidity()
-            # Get RH threshold
-            RH_max = ventilation_settings['RH_max']
-            # Call function
-            vent_RH(RH, RH_max)
-        elif ventilation_settings['mode_sensor'] == 'TaRH':
-            # Get sensor values
-            dht22 = DHT22.DHT22()
-            Ta = dht22.get_temperature()
-            RH = dht22.get_humidity()
-            # Get thresholds
-            Ta_max = ventilation_settings['Ta_max']
-            RH_max = ventilation_settings['RH_max']
-            # Call function
-            vent_TaRH(Ta, RH, Ta_max, RH_max)
-        elif 
+    if ventilation_settings['auto'] == True:
+        if ventilation_settings['mode_ventilation_stop'] == True:
+            # Get start and end time
+            start_hour = int(ventilation_settings['start_time'][0:2])
+            start_minute = int(ventilation_settings['start_time'][3:5])
+            end_hour = int(ventilation_settings['end_time'][0:2])
+            end_minute = int(ventilation_settings['end_time'][3:5])
+            
+            # Calculate start and end time in minutes
+            start_time = start_hour*60 + start_minute
+            end_time = end_hour*60 + end_minute
 
-
-
-        start_hour = ventilation_settings['start_hour']
-        start_minute = ventilation_settings['start_min']
-        end_hour = ventilation_settings['end_hour']
-        end_minute = ventilation_settings['end_min']
-        # Calculate start and end time in minutes
-        start_time = int(start_hour)*60 + int(start_minute)
-        end_time = int(end_hour)*60 + int(end_minute)
-        print(start_time, end_time)
-        if light_settings['mode'] == 'time_sensor_control':
-            lux_threshold = light_settings['lux_threshold']
-            # Call function for execution
-            light_time_sensor(start_time, end_time, lux_threshold)
-        else:
-            # Call function for execution
-            light_time(start_time, end_time)
+        elif ventilation_settings['mode_ventilation_stop'] == False:
+            if ventilation_settings['mode'] == 'Lufttemperatursteuerung':
+                # Get Ta from senor
+                dht22 = DHT22.DHT22()
+                Ta = dht22.get_temperature()
+                # Get Ta threshold
+                Ta_max = ventilation_settings['Ta_max']
+                # Call function
+                vent_Ta(Ta, Ta_max)
+            elif ventilation_settings['mode'] == 'Luftfeuchtesteuerung':
+                # Get RH from senor
+                dht22 = DHT22.DHT22()
+                RH = dht22.get_humidity()
+                # Get RH threshold
+                RH_max = ventilation_settings['RH_max']
+                # Call function
+                vent_RH(RH, RH_max)
+            elif ventilation_settings['mode'] == 'Lufttemperatur- und Luftfeuchtesteuerung':
+                # Get sensor values
+                dht22 = DHT22.DHT22()
+                Ta = dht22.get_temperature()
+                RH = dht22.get_humidity()
+                # Get thresholds
+                Ta_max = ventilation_settings['Ta_max']
+                RH_max = ventilation_settings['RH_max']
+                # Call function
+                vent_TaRH(Ta, RH, Ta_max, RH_max)
