@@ -2,7 +2,7 @@ from giessomat import Database
 from giessomat import DHT22, HCSR04, DC18B20
 #MCP3008, Photoresistor 
 
-def get_sensordata(volume_cal_value, gpios_hcsr04 = [18, 12], gpio_dht22 = 17):
+def get_sensordata(gpios_hcsr04 = [18, 12], gpio_dht22 = 17):
     """
     Reads all sensor values and returns it as a distionary.
 
@@ -31,7 +31,7 @@ def get_sensordata(volume_cal_value, gpios_hcsr04 = [18, 12], gpio_dht22 = 17):
     lux = 9999
 
     # Sensor value from HC-SR04 (water level)
-    hcsr04 = HCSR04.HCSR04(gpios_hcsr04[0], gpios_hcsr04[1], volume_cal_value)
+    hcsr04 = HCSR04.HCSR04(gpios_hcsr04[0], gpios_hcsr04[1])
     waterlevel = hcsr04.calc_volume()
 
     return Ta, RH, soil_temp, soil_humid, lux, waterlevel
@@ -53,7 +53,7 @@ def sensordata2database(dbPath, sensordata):
 
 if __name__ == "__main__":
     try:
-        sensordata = get_sensordata(volume_cal_value=1.763668430335097)
+        sensordata = get_sensordata()
         # sensordata: Ta, RH, soil_temp, soil_humid, lux, waterlevel
         sensordata2database('/home/pi/Giess-o-mat/giessomat_db.db', sensordata)
     except:

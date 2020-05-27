@@ -13,7 +13,7 @@ class HCSR04:
         gpio_echo (int): Number of GPIO Pin which receives the ultrasonic signal.
     """
 
-    def __init__(self, gpio_trigger, gpio_echo, val0p=56.5, val1d=2):
+    def __init__(self, gpio_trigger, gpio_echo, val0p=60, val1d=2):
         """
         The constructor for the HC-SR04 class.
 
@@ -30,7 +30,8 @@ class HCSR04:
 
         self.gpio_trigger = gpio_trigger
         self.gpio_echo = gpio_echo
-        self.cal_value = cal_value
+        self.val0p = val0p
+        self.val1d = val1d
 
         # GPIO Modus (BOARD / BCM)
         GPIO.setmode(GPIO.BCM)
@@ -75,7 +76,7 @@ class HCSR04:
         Returns the left volume in the container in percent.
         """
         distance = self.get_distance()
-        p = round((val0p - distance)*val1d, 2)
+        p = round((self.val0p - distance)*self.val1d, 2)
         return p
 
 
