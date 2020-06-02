@@ -45,7 +45,7 @@ def light_time_sensor(start, end, lux_threshold, GPIO=23, channel=2):
         end (int): End time in minutes when lightning shall stop.
         lux_threshold (int): Minimum value excepted before additional light source is needed.
         GPIO (int): GPIO pin used to switch Relais for light control.
-        channel (int): Channel of ADC.
+        channel (int): Channel of ADC of Photoresistor sensor.
     """
 
     light = Relais.Relais(GPIO)
@@ -65,7 +65,6 @@ if __name__ == '__main__':
     json_path = '/home/pi/Giess-o-mat-Webserver/light_settings.json'
     light_settings = read_json(json_path)
 
-    # Write settinsg to variables
     if light_settings['auto'] == True:
         start_hour = int(light_settings['start_time'][0:2])
         start_minute = int(light_settings['start_time'][3:5])

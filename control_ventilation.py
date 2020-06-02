@@ -115,7 +115,6 @@ if __name__ == '__main__':
     json_path = '/home/pi/Giess-o-mat-Webserver/ventilation_settings.json'
     ventilation_settings = read_json(json_path)
 
-    # Write settings to variables
     if ventilation_settings['auto'] == True:
         if ventilation_settings['mode_ventilation_stop'] == True:
             print("No ventilation in timespan")

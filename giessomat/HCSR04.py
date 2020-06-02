@@ -13,7 +13,7 @@ class HCSR04:
         gpio_echo (int): Number of GPIO Pin which receives the ultrasonic signal.
     """
 
-    def __init__(self, gpio_trigger, gpio_echo, val0p=60, val1d=2):
+    def __init__(self, gpio_trigger, gpio_echo, val0p=62, val1d=1.78571428571):
         """
         The constructor for the HC-SR04 class.
 
