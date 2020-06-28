@@ -1,4 +1,6 @@
 import RPi.GPIO as GPIO
+import sys
+
 
 class Relais:
     """ 
@@ -12,7 +14,7 @@ class Relais:
     def __init__(self, gpio_pin):
         """ 
         The constructor for the Relais class. 
-          
+
         Arguments: 
             gpio_pin (int): The number the GPIO Pin to control the Relais.  
         """
@@ -20,24 +22,22 @@ class Relais:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(gpio_pin, GPIO.OUT)
 
-    
     def on(self):
         """ 
         Switches the Relais from NC to NO. 
         """
 
-        GPIO.output(self.gpio_pin, GPIO.LOW)
+        GPIO.output(self.gpio_pin, GPIO.HIGH)
         self.status = True
-
 
     def off(self):
         """ 
         Switches the Relais from NC to NO. 
         """
 
-        GPIO.output(self.gpio_pin, GPIO.HIGH) 
+        GPIO.output(self.gpio_pin, GPIO.LOW)
         self.status = False
-        #GPIO.cleanup()
+        # GPIO.cleanup()
 
     def get_status(self):
         """ 
@@ -54,7 +54,7 @@ class Relais:
 
 if __name__ == "__main__":
     try:
-        gpio_pin = sys.argv[1]
+        gpio_pin = int(sys.argv[1])
         status = sys.argv[2]
 
         relais = Relais(gpio_pin)
@@ -65,4 +65,4 @@ if __name__ == "__main__":
             relais.off()
             print('Switched Relais on pin {} from NO to NC'.format(gpio_pin))
     except:
-        pass
+        raise
