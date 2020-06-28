@@ -31,7 +31,7 @@ class L298n:
         GPIO.setup(self.ena, GPIO.OUT)
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
-        self.pwm = GPIO.PWM(self.ena, 5000)
+        self.pwm = GPIO.PWM(self.ena, 20500)
 
     def run(self, percentage):
         """ 
