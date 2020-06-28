@@ -14,9 +14,9 @@ RH_max = 70 # maximum air humidity
 lux_threshold = 5000 # minimum lux value
 
 # Set start and end time of lightning
-start_hour = 7
+start_hour = 6
 start_minute = 0
-end_hour = 21
+end_hour = 22
 end_minute = 00
 # Calculate start and end time in minutes
 start_time = int(start_hour)*60 + int(start_minute)
@@ -112,30 +112,6 @@ def ventilation_auto(Ta, RH, Ta_max, RH_max, GPIO=24):
         ventilation.on()
     else:
         ventilation.off()
-
-
-# To DO: Wie lange wird bewaessert?
-def irrigation_auto(soilH, soilH_min, GPIO1, GPIO2):
-    """
-    Compares soilH with soilH_min. If statement is true irrigation starts.
-    
-    Arguments:
-        soilH: Actual soil moisture measured with soil moisture sensor.
-        soilH_min: Minimum soil moisture accepted before irrigation starts.
-        GPIO1: GPIO pin used to switch Relais for pump control.
-        GPIO2: GPIO pin used to switch Relais for valve control.
-    """
-
-    # Pump GPIO = 
-    pump = Relais.Relais(GPIO1)
-    # Valve GPIO = 
-    valve = Relais.Relais(GPIO2)
-    if soilH <= soilH_min:
-        valve.on()
-        pump.on()
-    else:
-        pump.off()
-        valve.off()
 
 
 if __name__ == '__main__':

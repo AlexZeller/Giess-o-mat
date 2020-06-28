@@ -7,7 +7,6 @@ class DC18B20:
 
     Attributes:
         sensor_id (str): Id of the sensor.  
-
     """
 
     def __init__(self, sensor_id = '28-0301a27973a0'):
@@ -27,8 +26,7 @@ class DC18B20:
         """
 
         # Read 1-wire slave data
-        print('/sys/bus/w1/devices/{}/w1_slave'.format(sensor_id))
-        file = open('/sys/bus/w1/devices/{}/w1_slave'.format(sensor_id))
+        file = open('/sys/bus/w1/devices/{}/w1_slave'.format(self.sensor_id))
         filecontent = file.read()
         file.close()
 
@@ -45,4 +43,4 @@ if __name__ == "__main__":
         soil_temp = dc18b20.get_temperature()
         print(soil_temp)
     except:
-        print('Something went wrong')
+        pass

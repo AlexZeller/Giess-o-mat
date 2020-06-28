@@ -10,7 +10,7 @@ class DHT22:
         dht_type (int): Type of the DHT sensor.
     """
 
-    def __init__(self, gpio_pin):
+    def __init__(self, gpio_pin=17):
         """
         The constructor for the DHT22 class.
         
