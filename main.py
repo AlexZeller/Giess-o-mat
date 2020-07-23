@@ -23,7 +23,7 @@ start_time = int(start_hour)*60 + int(start_minute)
 end_time = int(end_hour)*60 + int(end_minute)
 
 ############################################################################
-def light_time(start, end, GPIO=23):
+def light_time(start, end, GPIO1=23, GPIO2=16):
     """
     Depending of the current time the light is switched on (start < current
     time < end )or off (start > current time, stop < current time).
@@ -33,12 +33,15 @@ def light_time(start, end, GPIO=23):
         GPIO (int): GPIO pin used to switch Relais for light control.
     """
 
-    light = Relais.Relais(GPIO)
+    light1 = Relais.Relais(GPIO1)
+    light2 = Relais.Relais(GPIO2)
     current_time =  datetime.datetime.now().hour*60 + datetime.datetime.now().minute
     if start <= current_time and end >= current_time:
-        light.on()
+        light1.on()
+        light2.on()
     else:
-        light.off()
+        light1.off()
+        light2.off()
 
 
 def light_time_light(start, end, lux_threshold, GPIO=23, channel=2):

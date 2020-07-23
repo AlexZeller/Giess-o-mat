@@ -58,4 +58,3 @@ if __name__ == "__main__":
         sensordata2database('/home/pi/Giess-o-mat/giessomat_db.db', sensordata)
     except:
         raise
-        pass
