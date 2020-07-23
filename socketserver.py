@@ -2,19 +2,18 @@ from giessomat import Relais
 from giessomat import Fans
 import eventlet
 import socketio
-<< << << < HEAD
 
 eventlet.monkey_patch()
 
 
-#path_json = '/home/pi/Giess-o-mat/giessomat/processes.json'
-#path_l298n = '/home/pi/Giess-o-mat/giessomat/L298n.py'
+path_json = '/home/pi/Giess-o-mat/giessomat/processes.json'
+path_l298n = '/home/pi/Giess-o-mat/giessomat/L298n.py'
 
-relais_light = Relais.Relais(17)
-relais_fan = Relais.Relais(18)
+relais_light = Relais.Relais(24)
+relais_irrigation = Relais.Relais(23)
 
 
-#fans = Fans.Fans(path_l298n, path_json)
+fans = Fans.Fans(path_l298n, path_json)
 
 mgr = socketio.KombuManager('amqp://')
 sio = socketio.Server(cors_allowed_origins=[
@@ -29,13 +28,14 @@ def connect(sid, environ):
     print('connect', sid)
 
 
-# @sio.event
-# def fan(sid, data):
-#    if data == True:
-#        fans.start_fans(50)
-#       print('started fans')
-#    if data == False:
-#        fans.stop_fans()
+@sio.event
+def fan(sid, data):
+    if data == True:
+        fans.start_fans(10)
+        print('started fans')
+    if data == False:
+        fans.stop_fans()
+
 
 @sio.event
 def light(sid, data):
@@ -48,19 +48,13 @@ def light(sid, data):
 
 
 @sio.event
-def fan(sid, data):
+def irrigationn(sid, data):
     if data == True:
         print(data)
-        relais_fan.on()
+        relais_irrigation.on()
     if data == False:
         print(data)
-        relais_fan.off()
-
-
-@sio.event
-def test(sid, data):
-    print('test')
-    sio.emit('fan', True)
+        relais_irrigation.off()
 
 
 @sio.event
