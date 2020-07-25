@@ -6,15 +6,17 @@ from giessomat import Relais, Photoresistor
 
 def read_json(path_json):
     """
-    Takes a path to json file and returns json data as dictionary.
+    Takes a path to a .json file and returns json data as dictionary.
 
     Arguments:
         path_json (str): Path to json file.
     """
 
-    with open(path_json) as s:
-        settings = json.load(s)
+    with open(path_json) as f:
+        settings = json.load(f)
+
     return(settings)
+
 
 def light_time(start, end, GPIO=23):
     """
@@ -27,7 +29,7 @@ def light_time(start, end, GPIO=23):
     """
 
     light = Relais.Relais(GPIO)
-    current_time =  datetime.datetime.now().hour*60 + datetime.datetime.now().minute
+    current_time = datetime.datetime.now().hour*60 + datetime.datetime.now().minute
     if start <= current_time and end >= current_time:
         light.on()
     else:
@@ -52,8 +54,8 @@ def light_time_sensor(start, end, lux_threshold, GPIO=23, channel=2):
     photoresistor = Photoresistor.Photoresistor(channel)
     # Get current lux value
     lux_reading = photoresistor.get_lux()
-    
-    current_time =  datetime.datetime.now().hour*60 + datetime.datetime.now().minute
+
+    current_time = datetime.datetime.now().hour*60 + datetime.datetime.now().minute
     if lux_reading < lux_threshold and (start <= current_time and end >= current_time):
         light.on()
     else:
@@ -70,7 +72,7 @@ if __name__ == '__main__':
         start_minute = int(light_settings['start_time'][3:5])
         end_hour = int(light_settings['end_time'][0:2])
         end_minute = int(light_settings['end_time'][3:5])
-        
+
         # Calculate start and end time in minutes
         start_time = start_hour*60 + start_minute
         end_time = end_hour*60 + end_minute
@@ -79,8 +81,9 @@ if __name__ == '__main__':
             lux_threshold = light_settings['lux_threshold']
             # Call function for execution
             light_time_sensor(start_time, end_time, lux_threshold)
-        elif light_settings['mode'] == 'Zeitsteuerung'::
-            # Call function for execution
+        elif light_settings['mode'] == 'Zeitsteuerung':
+            :
+                # Call function for execution
             light_time(start_time, end_time)
     else:
         print("XXX")

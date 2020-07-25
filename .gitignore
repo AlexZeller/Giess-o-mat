@@ -130,3 +130,4 @@ dmypy.json
 
 # Ignore Database
 /giessomat_db.db
+/giessomat/processes.json
