@@ -54,7 +54,10 @@ class Fans:
         with open(self.json, 'r') as f:
             json_data = json.load(f)
             pid = json_data["fans"]
-        os.kill(pid, signal.SIGTERM)
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except:
+            print('No such process')
         subprocess.call(['python', self.l298n, 'stop'])
 
     def change_speed(self, speed):

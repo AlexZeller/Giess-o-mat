@@ -4,6 +4,9 @@ import sys
 import Relais
 import Photoresistor
 
+# Set up logging
+log = logging.getLogger(__name__)
+
 
 class LightControl:
 
@@ -14,9 +17,12 @@ class LightControl:
         Arguments:
             path_json (str): Path to json file.
         """
-
-        with open(path_json) as f:
-            settings = json.load(f)
+        try:
+            with open(path_json) as f:
+                settings = json.load(f)
+                log.debug('Loaded .json settings')
+        except:
+            log.exception()
 
         self.settings = settings
 
@@ -33,6 +39,7 @@ class LightControl:
         # get current time
         current_time = datetime.datetime.now().strftime("%H:%M")
 
+        # check if current time in between start and end time
         if start_time < end_time:
             return current_time > start_time and current_time < end_time
         else:
@@ -40,31 +47,46 @@ class LightControl:
             return current_time > start_time or current_time < end_time
 
     def execute(self, GPIO=24, channel=2):
+        """
+        Executes the main control function.
 
+        Arguments: 
+            GPIO (int): The GPIO of the Relais Channel
+            channel (int): The channel of the photoresistor
+        """
+
+        # Set up Relais and Photoresistor reading
         light = Relais.Relais(GPIO)
         photoresistor = Photoresistor.Photoresistor(channel)
         lux_reading = photoresistor.get_lux()
 
+        # get setting info
         start_time = self.settings['start_time']
         end_time = self.settings['end_time']
-
         mode = self.settings['mode']
+        lux_threshold = int(self.settings['lux_threshold'])
 
         if mode == 'Manuell':
+            log.info('Mode: Manuell')
             return
         elif mode == 'Zeitsteuerung':
-            if self.check_if_time_inbetween(start_time, end_time) == True:
+            log.info('Mode: Zeitsteuerung')
+            if self.check_if_time_inbetween(start_time, end_time):
+                log.info('In between set time. Light on.')
                 light.on()
             else:
+                log.info('Not in between set time. Light off.')
                 light.off()
-        elif mode == 'Zeit- und Helligkeitssteuerung' == True:
-            lux_threshold = self.settings['lux_threshold']
+        elif mode == 'Zeit- und Helligkeitssteuerung':
+            log.info('Mode: Zeit- und Helligkeitssteuerung')
             if self.check_if_time_inbetween(start_time, end_time) and lux_reading < lux_threshold:
+                log.info('Lux reading under threshold. Light on.')
                 light.on()
             else:
+                log.info('Lux reading above threshold. Light off.')
                 light.off()
         else:
-            print('mode not recognised')
+            log.error('Mode not recognised')
 
 
 if __name__ == "__main__":
