@@ -4,8 +4,8 @@ from giessomat import VentilationControl
 from giessomat import IrrigationControl
 
 # Set up logging
-logging.basicConfig(filename='giessomat.log', filemode='w', level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s', datefmt='%H:%M:%S')
+logging.basicConfig(filename='giessomat.log', filemode='a', level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
 log = logging.getLogger(__name__)
 
 light_control = LightControl.LightControl(
@@ -17,4 +17,4 @@ irrigation_control = IrrigationControl.IrrigationControl(
 
 # light_control.execute()
 ventilation_control.execute()
-# irrigation_control.execute()
+irrigation_control.execute()
