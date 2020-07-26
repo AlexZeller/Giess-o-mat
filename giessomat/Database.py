@@ -1,4 +1,5 @@
 import sys
+import logging
 import sqlite3
 import Database
 import DHT22
@@ -6,6 +7,9 @@ import HCSR04
 import DC18B20
 import MCP3008
 import Photoresistor
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 
 class Database:
@@ -45,7 +49,9 @@ class Database:
                                 waterlevel REAL
                                 );"""
             self.cur.execute(create_table_sql)
+            log.debug('Connected to database')
         except sqlite3.Error as e:
+            log.error('Error connecting to database')
             print(e)
 
     def executeSQL(self, sql, par):
@@ -72,27 +78,30 @@ class Database:
             soilmoist_ch (int):
             dc18b20_id (str)
         """
+        try:
+            # Sensor values from DHT22 (air temperature and humidity)
+            dht22 = DHT22.DHT22(17)
+            Ta = dht22.get_temperature()
+            RH = dht22.get_humidity()
 
-        # Sensor values from DHT22 (air temperature and humidity)
-        dht22 = DHT22.DHT22(17)
-        Ta = dht22.get_temperature()
-        RH = dht22.get_humidity()
+            # Sensor value from DC18B20(soil temperature)
+            dc18b20 = DC18B20.DC18B20()
+            soil_temp = dc18b20.get_temperature()
 
-        # Sensor value from DC18B20(soil temperature)
-        dc18b20 = DC18B20.DC18B20()
-        soil_temp = dc18b20.get_temperature()
+            # Sensor value from MCP3008 channel X (soil humidity)
+            soil_humid = 9999
 
-        # Sensor value from MCP3008 channel X (soil humidity)
-        soil_humid = 9999
+            # Sensor value from MCP3008 channel Y (lux)
+            lux = 9999
 
-        # Sensor value from MCP3008 channel Y (lux)
-        lux = 9999
+            # Sensor value from HC-SR04 (water level)
+            hcsr04 = HCSR04.HCSR04(gpios_hcsr04[0], gpios_hcsr04[1])
+            waterlevel = hcsr04.calc_volume()
 
-        # Sensor value from HC-SR04 (water level)
-        hcsr04 = HCSR04.HCSR04(gpios_hcsr04[0], gpios_hcsr04[1])
-        waterlevel = hcsr04.calc_volume()
-
-        return Ta, RH, soil_temp, soil_humid, lux, waterlevel
+            log.debug('Sucessfully read sensor values')
+            return Ta, RH, soil_temp, soil_humid, lux, waterlevel
+        except:
+            log.error('Error reading sensor values')
 
     def sensordata2database(self):
         """
@@ -101,7 +110,11 @@ class Database:
 
         sensordata = self.get_sensordata()
         sql = "INSERT INTO sensor_data (air_temp, air_humid, soil_temp, soil_humid, lux, waterlevel) VALUES (?, ?, ?, ?, ?, ?);"
-        self.executeSQL(sql, sensordata)
+        try:
+            self.executeSQL(sql, sensordata)
+            log.info('Wrote sensor values to database')
+        except:
+            log.error('Error writing sensor values to database')
 
 
 if __name__ == "__main__":
