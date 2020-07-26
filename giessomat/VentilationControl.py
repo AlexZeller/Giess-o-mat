@@ -81,7 +81,7 @@ class VentilationControl:
                 log.info('Mode: Lufttemperatursteuerung')
                 if Ta > Ta_threshold:
                     log.info('Ta > Threshold. Turning Fans on')
-                    fans.start_fans(25)
+                    fans.start_fans(50)
                 else:
                     log.info('Ta < Threshold. Fans off')
                     fans.stop_fans()
@@ -90,7 +90,7 @@ class VentilationControl:
                 log.info('Mode: Luftfeuchtesteuerung')
                 if Rh > Rh_threshold:
                     log.info('Rh > Threshold. Turning Fans on')
-                    fans.start_fans(25)
+                    fans.start_fans(50)
                 else:
                     log.info('Rh < Threshold. Fans off')
                     fans.stop_fans()
@@ -99,7 +99,7 @@ class VentilationControl:
                 log.info('Mode: Lufttemperatur- und Luftfeuchtesteuerung')
                 if Rh > Rh_threshold or Ta > Ta_threshold:
                     log.info('Rh or Ta > Threshold. Turning Fans on')
-                    fans.start_fans(25)
+                    fans.start_fans(50)
                 else:
                     log.info('Rh or Ta < Threshold. Fans off')
                     fans.stop_fans()

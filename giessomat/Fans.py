@@ -58,7 +58,7 @@ class Fans:
             os.kill(pid, signal.SIGTERM)
         except:
             print('No such process')
-        subprocess.call(['python', self.l298n, 'stop'])
+        subprocess.Popen(['python', self.l298n, 'stop'])
 
     def change_speed(self, speed):
         """ 
