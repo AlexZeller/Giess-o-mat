@@ -1,4 +1,5 @@
 import datetime
+import logging
 import time
 import json
 import sys
@@ -53,12 +54,12 @@ class IrrigationControl:
         """
         delta_days = self.get_delta_days(timestamp_settings)
 
-        return delta_days % interval == 0:
+        return delta_days % interval == 0
 
     def check_if_time(self, time):
         """
         Takes a times (HH:MM) and returns True if the current time
-        is within an additional two minutes of the give time, otherwise False.
+        is within an additional 5 minutes of the give time, otherwise False.
 
         Arguments:
             start_time (str): start time.
@@ -67,17 +68,21 @@ class IrrigationControl:
 
         # get current time
         current_time = datetime.datetime.now().strftime("%H:%M")
-        time_buffer_datetime = datetime.datetime.now() + datetime.timedelta(seconds=120)
-        time_buffer = time_buffer_datetime..strftime("%H:%M")
+        time_buffer_datetime = datetime.datetime.strptime(
+            time, "%H:%M") + datetime.timedelta(seconds=300)
+        time_buffer = time_buffer_datetime.strftime("%H:%M")
+
+        log.debug('Current time: ' + current_time)
+        log.debug('Irrigation time: ' + time)
 
         # check if current time in between start and end time
         if time < time_buffer:
-            return current_time > time and current_time < time_buffer
+            return current_time >= time and current_time < time_buffer
         else:
             # in case times cross midnight
-            return current_time > time or current_time < time_buffer
+            return time >= current_time or current_time < time_buffer
 
-    def execute(self, GPIO=24, channel=2):
+    def execute(self, GPIO=23, channel=0):
         """
         Executes the main control function.
 
@@ -85,6 +90,11 @@ class IrrigationControl:
             GPIO (int): The GPIO of the Relais Channel
             channel (int): The channel of the photoresistor
         """
+
+        # Set up Relais and soil moisture reading
+        soilmoisture = SoilMoisture.SoilMoisture(channel)
+        moisture_reading = soilmoisture.get_volumetric_water_content()
+        irrigation = Relais.Relais(GPIO)
 
         # get setting info
         mode = self.settings['mode']
@@ -94,26 +104,244 @@ class IrrigationControl:
         irrigation_time_1 = self.settings['irrigation_time_1']
         irrigation_time_2 = self.settings['irrigation_time_2']
         irrigation_time_3 = self.settings['irrigation_time_3']
-        humidity_threshold = int(self.settings['humidity_threshold'])
+        moisture_threshold = int(self.settings['humidity_threshold'])
         mode = self.settings['mode']
+        timestamp = self.settings['timestamp']
 
         if mode == 'Manuell':
             log.info('Mode: Manuell')
             return
         elif mode == 'Zeitsteuerung':
             log.info('Mode: Zeitsteuerung')
+            # check if it is an irrigation day
+            if self.check_if_day(interval, timestamp):
+                log.debug('Interval returns irrigation day')
+                # only if interval = 1 multiple irrigation times are possible
+                if interval == 1:
+                    if number_irrigations == 1:
+                        log.debug('Number of irrigations = 1')
+                        if self.check_if_time(irrigation_time_1):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        else:
+                            log.info('Current time is NOT irrigation time')
+
+                    if number_irrigations == 2:
+                        log.debug('Number of irrigations = 2')
+                        if self.check_if_time(irrigation_time_1):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        if self.check_if_time(irrigation_time_2):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        else:
+                            log.info('Current time is NOT irrigation time')
+
+                    if number_irrigations == 3:
+                        log.debug('Number of irrigations = 3')
+                        if self.check_if_time(irrigation_time_1):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        if self.check_if_time(irrigation_time_2):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        if self.check_if_time(irrigation_time_3):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        else:
+                            log.info('Current time is NOT irrigation time')
+                # all other intervals only have 1 irrigation time
+                else:
+                    if self.check_if_time(irrigation_time_1):
+                        log.info('Current time IS irrigation time (buffer)')
+                        log.info('Turning irrigation ON')
+                        # irrigation.on()
+                        time.sleep(duration_irrigation)
+                        log.info('Turning irrigation OFF')
+                        # irrigation.off()
+
+                    else:
+                        log.info('Current time is NOT irrigation time')
+                        return
+            else:
+                log.info('Interval returns NO irrigation day')
+                return
 
         elif mode == 'Bodenfeuchtesteuerung':
             log.info('Mode: Bodenfeuchtesteuerung')
+            # To be done
 
         elif mode == 'Zeit- und Bodenfeuchtesteuerung':
             log.info('Mode: Zeit- und Bodenfeuchtesteuerung')
+            # check if it is an irrigation day
+            if self.check_if_day(interval, timestamp):
+                log.debug('Interval returns irrigation day')
+                # only if interval = 1 multiple irrigation times are possible
+                if interval == 1:
+                    if number_irrigations == 1:
+                        log.debug('Number of irrigations = 1')
+                        if self.check_if_time(irrigation_time_1):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            if moisture_reading < moisture_threshold:
+                                log.info(
+                                    'Moisture reading below moisture threshold')
+                                log.info('Turning irrigation ON')
+                                # irrigation.on()
+                                time.sleep(duration_irrigation)
+                                log.info('Turning irrigation OFF')
+                                # irrigation.off()
+                            else:
+                                log.info(
+                                    'Moisture reading above moisture threshold. NO irrigation')
+                                return
+                        else:
+                            log.info('Current time is NOT irrigation time')
+
+                    if number_irrigations == 2:
+                        log.debug('Number of irrigations = 2')
+                        if self.check_if_time(irrigation_time_1):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            if moisture_reading < moisture_threshold:
+                                log.info(
+                                    'Moisture reading below moisture threshold')
+                                log.info('Turning irrigation ON')
+                                # irrigation.on()
+                                time.sleep(duration_irrigation)
+                                log.info('Turning irrigation OFF')
+                                # irrigation.off()
+                            else:
+                                log.info(
+                                    'Moisture reading above moisture threshold. NO irrigation')
+                                return
+                        if self.check_if_time(irrigation_time_2):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            if moisture_reading < moisture_threshold:
+                                log.info(
+                                    'Moisture reading below moisture threshold')
+                                log.info('Turning irrigation ON')
+                                # irrigation.on()
+                                time.sleep(duration_irrigation)
+                                log.info('Turning irrigation OFF')
+                                # irrigation.off()
+                            else:
+                                log.info(
+                                    'Moisture reading above moisture threshold. NO irrigation')
+                                return
+                        else:
+                            log.info('Current time is NOT irrigation time')
+
+                    if number_irrigations == 3:
+                        log.debug('Number of irrigations = 3')
+                        if self.check_if_time(irrigation_time_1):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            if moisture_reading < moisture_threshold:
+                                log.info(
+                                    'Moisture reading below moisture threshold')
+                                log.info('Turning irrigation ON')
+                                # irrigation.on()
+                                time.sleep(duration_irrigation)
+                                log.info('Turning irrigation OFF')
+                                # irrigation.off()
+                            else:
+                                log.info(
+                                    'Moisture reading above moisture threshold. NO irrigation')
+                                return
+                        if self.check_if_time(irrigation_time_2):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            if moisture_reading < moisture_threshold:
+                                log.info(
+                                    'Moisture reading below moisture threshold')
+                                log.info('Turning irrigation ON')
+                                # irrigation.on()
+                                time.sleep(duration_irrigation)
+                                log.info('Turning irrigation OFF')
+                                # irrigation.off()
+                            else:
+                                log.info(
+                                    'Moisture reading above moisture threshold. NO irrigation')
+                                return
+                        if self.check_if_time(irrigation_time_3):
+                            log.info(
+                                'Current time IS irrigation time (buffer)')
+                            if moisture_reading < moisture_threshold:
+                                log.info(
+                                    'Moisture reading below moisture threshold')
+                                log.info('Turning irrigation ON')
+                                # irrigation.on()
+                                time.sleep(duration_irrigation)
+                                log.info('Turning irrigation OFF')
+                                # irrigation.off()
+                            else:
+                                log.info(
+                                    'Moisture reading above moisture threshold. NO irrigation')
+                                return
+                        else:
+                            log.info('Current time is NOT irrigation time')
+                # all other intervals only have 1 irrigation time
+                else:
+                    if self.check_if_time(irrigation_time_1):
+                        log.info('Current time IS irrigation time (buffer)')
+                        if moisture_reading < moisture_threshold:
+                            log.info(
+                                'Moisture reading below moisture threshold')
+                            log.info('Turning irrigation ON')
+                            # irrigation.on()
+                            time.sleep(duration_irrigation)
+                            log.info('Turning irrigation OFF')
+                            # irrigation.off()
+                        else:
+                            log.info(
+                                'Moisture reading above moisture threshold. NO irrigation')
+                            return
+
+                    else:
+                        log.info('Current time is NOT irrigation time')
+                        return
+            else:
+                log.info('Interval returns NO irrigation day')
+                return
 
         else:
             log.error('Mode not recognised')
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     try:
         irrigationcontrol = IrrigationControl(
             '/home/pi/Giess-o-mat-Webserver/irrigation_settings.json')
