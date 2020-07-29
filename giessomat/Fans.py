@@ -3,7 +3,10 @@ import os
 import signal
 import sys
 import json
+import logging
 
+# Set up logging
+log = logging.getLogger(__name__)
 
 class Fans:
     """ 
@@ -36,6 +39,7 @@ class Fans:
         """
         fan_subprocess = subprocess.Popen(
             ['python', self.l298n, 'run', str(speed)])
+        log.debug('Opened L298n subprocess to run fans')
         fan_id = fan_subprocess.pid
         with open(self.json, 'r+') as f:
             json_data = json.load(f)
@@ -43,6 +47,7 @@ class Fans:
             f.seek(0)
             f.write(json.dumps(json_data))
             f.truncate()
+            log.debug('Wrote subprocess id to processes.json')
 
     def stop_fans(self):
         """ 
@@ -56,8 +61,9 @@ class Fans:
             pid = json_data["fans"]
         try:
             os.kill(pid, signal.SIGTERM)
+            log.debug('Killed subprocess to stop fans')
         except:
-            print('No such process')
+            log.debug('No such subprocess')
         subprocess.Popen(['python', self.l298n, 'stop'])
 
     def change_speed(self, speed):

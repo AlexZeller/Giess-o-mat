@@ -2,6 +2,10 @@ import sys
 import RPi.GPIO as GPIO
 import time
 import math
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 
 class HCSR04:
@@ -69,6 +73,7 @@ class HCSR04:
         # multiply with sonic speed (34300 cm/s) and divide by two (there and back)
         distance = (TimeElapsed * 34300) / 2
 
+        log.debug('Calculated distance')
         return distance
     
     def calc_volume(self):
@@ -77,6 +82,7 @@ class HCSR04:
         """
         distance = self.get_distance()
         p = round((self.val0p - distance)*self.val1d, 2)
+        log.debug('Calculated volume')
         return p
 
 

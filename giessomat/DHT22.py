@@ -1,5 +1,9 @@
 import sys
 import Adafruit_DHT
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 class DHT22:
     """
@@ -25,27 +29,34 @@ class DHT22:
         """ 
         Reads the temperature value from the sensor and returns it.
         """
+        try:
+            values = Adafruit_DHT.read_retry(self.dht_type, self.gpio_pin)
+            log.debug('Read DHT22 temperature value')
+            temperature = round(values[1], 2)
+            return temperature
+        except:
+            log.error('Failed to read DHT22 temperature value')
 
-        values = Adafruit_DHT.read_retry(self.dht_type, self.gpio_pin)
-        temperature = round(values[1], 2)
-        return temperature
 
     def get_humidity(self):
         """
         Reads the humdity value from the sensor and returns it.
         """
-
-        values = Adafruit_DHT.read_retry(self.dht_type, self.gpio_pin)
-        humidity = round(values[0], 2)
-        return humidity
+        try:
+            values = Adafruit_DHT.read_retry(self.dht_type, self.gpio_pin)
+            log.debug('Read DHT22 humidity value')
+            humidity = round(values[0], 2)
+            return humidity
+        except:
+            log.error('Failed to read DHT22 humidity value')
 
 
 if __name__ == "__main__":
     try:
         gpio_pin = sys.argv[1]
-
         dht22 = DHT22(gpio_pin)
         print('Air temperature: ', dht22.get_temperature())
         print('Humidity: ', dht22.get_humidity())
     except:
+        raise
         print('Something did not work with DHT22.')

@@ -45,9 +45,9 @@ class Relais:
         """
 
         gpio_status = GPIO.input(self.gpio_pin)
-        if gpio_status == 0:
-            relais_status = True
         if gpio_status == 1:
+            relais_status = True
+        if gpio_status == 0:
             relais_status = False
         return relais_status
 
