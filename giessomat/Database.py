@@ -39,7 +39,7 @@ class Database:
             self.cur = self.conn.cursor()
 
             # Create table if not already exist
-            create_table_sql = """CREATE TABLE IF NOT EXISTS sensor_data 
+            create_sensor_table_sql = """CREATE TABLE IF NOT EXISTS sensor_data 
                                 (timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                                 air_temp REAL,
                                 air_humid REAL,
@@ -48,7 +48,15 @@ class Database:
                                 lux REAL,
                                 waterlevel REAL
                                 );"""
-            self.cur.execute(create_table_sql)
+                
+            create_log_table_sql = """CREATE TABLE IF NOT EXISTS log 
+                                (timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                topic TEXT,
+                                level TEXT,
+                                message TEXT
+                                );"""
+            self.cur.execute(create_sensor_table_sql)
+            self.cur.execute(create_log_table_sql)
             log.debug('Connected to database')
         except sqlite3.Error as e:
             log.error('Error connecting to database')
@@ -116,10 +124,28 @@ class Database:
         except:
             log.error('Error writing sensor values to database')
 
+    def log2database(self, topic, level, message):
+        """
+        Write log data to database.
+
+        Arguments:
+            topic (str): The topic of the log i.e irrigation
+            level (str): The level of the message i.e error
+            message (str): The message of the log
+        """
+
+        sql = "INSERT INTO log (topic, level, message) VALUES (?, ?, ?);"
+        try:
+            self.executeSQL(sql, (topic, level, message))
+            log.debug('Wrote log to database')
+        except:
+            log.error('Error writing log to database')
+
 
 if __name__ == "__main__":
     try:
         db = Database('/home/pi/Giess-o-mat/giessomat_db.db')
-        db.sensordata2database()
+        #db.sensordata2database()
+        db.log2database('Ventilation', 'info', 'Nachtruhe. Fans off.')
     except:
         raise

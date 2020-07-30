@@ -4,9 +4,11 @@ import sys
 import logging
 import Fans
 import DHT22
+import Database
 
 # Set up logging
 log = logging.getLogger(__name__)
+db = Database.Database('/home/pi/Giess-o-mat/giessomat_db.db')
 
 
 class VentilationControl:
@@ -75,33 +77,40 @@ class VentilationControl:
             return
         if night_mode and self.check_if_time_inbetween(start_time, end_time):
             log.info('Nachtruhe. Fans off.')
+            db.log2database('Ventilation', 'info', 'Nachtruhe. Fans off.')
             fans.stop_fans()
         else:
             if mode == 'Lufttemperatursteuerung':
                 log.info('Mode: Lufttemperatursteuerung')
                 if Ta > Ta_threshold:
                     log.info('Ta > Threshold. Turning Fans on')
+                    db.log2database('Ventilation', 'info', 'Ta > Threshold. Turning Fans on')
                     fans.start_fans(50)
                 else:
                     log.info('Ta < Threshold. Fans off')
+                    db.log2database('Ventilation', 'info', 'Ta < Threshold. Fans off')
                     fans.stop_fans()
 
             elif mode == 'Luftfeuchtesteuerung':
                 log.info('Mode: Luftfeuchtesteuerung')
                 if Rh > Rh_threshold:
                     log.info('Rh > Threshold. Turning Fans on')
+                    db.log2database('Ventilation', 'info', 'Rh > Threshold. Turning Fans on')
                     fans.start_fans(50)
                 else:
                     log.info('Rh < Threshold. Fans off')
+                    db.log2database('Ventilation', 'info', 'Rh < Threshold. Fans off')
                     fans.stop_fans()
 
             elif mode == 'Lufttemperatur- und Luftfeuchtesteuerung':
                 log.info('Mode: Lufttemperatur- und Luftfeuchtesteuerung')
                 if Rh > Rh_threshold or Ta > Ta_threshold:
                     log.info('Rh or Ta > Threshold. Turning Fans on')
+                    db.log2database('Ventilation', 'info', 'Rh or Ta > Threshold. Turning Fans on')
                     fans.start_fans(50)
                 else:
                     log.info('Rh or Ta < Threshold. Fans off')
+                    db.log2database('Ventilation', 'info', 'Rh or Ta < Threshold. Fans off')
                     fans.stop_fans()
 
             else:

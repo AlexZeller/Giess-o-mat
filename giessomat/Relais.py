@@ -33,7 +33,7 @@ class Relais:
 
         GPIO.output(self.gpio_pin, GPIO.HIGH)
         self.status = True
-        log.debug('Switched Relais on GPIO ' + self.gpio_pin + ' on')
+        log.debug('Switched Relais on GPIO ' + str(self.gpio_pin) + ' on')
 
     def off(self):
         """ 
@@ -42,7 +42,7 @@ class Relais:
 
         GPIO.output(self.gpio_pin, GPIO.LOW)
         self.status = False
-        log.debug('Switched Relais on GPIO ' + self.gpio_pin + ' off')
+        log.debug('Switched Relais on GPIO ' + str(self.gpio_pin) + ' off')
 
     def get_status(self):
         """ 

@@ -5,9 +5,11 @@ import json
 import sys
 import Relais
 import SoilMoisture
+import Database
 
 # Set up logging
 log = logging.getLogger(__name__)
+db = Database.Database('/home/pi/Giess-o-mat/giessomat_db.db')
 
 
 class IrrigationControl:
@@ -124,10 +126,11 @@ class IrrigationControl:
                             log.info(
                                 'Current time IS irrigation time (buffer)')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         else:
                             log.info('Current time is NOT irrigation time')
 
@@ -137,18 +140,20 @@ class IrrigationControl:
                             log.info(
                                 'Current time IS irrigation time (buffer)')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         if self.check_if_time(irrigation_time_2):
                             log.info(
                                 'Current time IS irrigation time (buffer)')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         else:
                             log.info('Current time is NOT irrigation time')
 
@@ -158,26 +163,29 @@ class IrrigationControl:
                             log.info(
                                 'Current time IS irrigation time (buffer)')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         if self.check_if_time(irrigation_time_2):
                             log.info(
                                 'Current time IS irrigation time (buffer)')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         if self.check_if_time(irrigation_time_3):
                             log.info(
                                 'Current time IS irrigation time (buffer)')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         else:
                             log.info('Current time is NOT irrigation time')
                 # all other intervals only have 1 irrigation time
@@ -185,10 +193,11 @@ class IrrigationControl:
                     if self.check_if_time(irrigation_time_1):
                         log.info('Current time IS irrigation time (buffer)')
                         log.info('Turning irrigation ON')
-                        # irrigation.on()
+                        db.log2database('Irrigation', 'info', 'Irrigation based on "Zeitsteuerung"')
+                        irrigation.on()
                         time.sleep(duration_irrigation)
                         log.info('Turning irrigation OFF')
-                        # irrigation.off()
+                        irrigation.off()
 
                     else:
                         log.info('Current time is NOT irrigation time')
@@ -217,10 +226,11 @@ class IrrigationControl:
                                 log.info(
                                     'Moisture reading below moisture threshold')
                                 log.info('Turning irrigation ON')
-                                # irrigation.on()
+                                db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                                irrigation.on()
                                 time.sleep(duration_irrigation)
                                 log.info('Turning irrigation OFF')
-                                # irrigation.off()
+                                irrigation.off()
                             else:
                                 log.info(
                                     'Moisture reading above moisture threshold. NO irrigation')
@@ -237,10 +247,11 @@ class IrrigationControl:
                                 log.info(
                                     'Moisture reading below moisture threshold')
                                 log.info('Turning irrigation ON')
-                                # irrigation.on()
+                                db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                                irrigation.on()
                                 time.sleep(duration_irrigation)
                                 log.info('Turning irrigation OFF')
-                                # irrigation.off()
+                                irrigation.off()
                             else:
                                 log.info(
                                     'Moisture reading above moisture threshold. NO irrigation')
@@ -252,10 +263,11 @@ class IrrigationControl:
                                 log.info(
                                     'Moisture reading below moisture threshold')
                                 log.info('Turning irrigation ON')
-                                # irrigation.on()
+                                db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                                irrigation.on()
                                 time.sleep(duration_irrigation)
                                 log.info('Turning irrigation OFF')
-                                # irrigation.off()
+                                irrigation.off()
                             else:
                                 log.info(
                                     'Moisture reading above moisture threshold. NO irrigation')
@@ -272,10 +284,11 @@ class IrrigationControl:
                                 log.info(
                                     'Moisture reading below moisture threshold')
                                 log.info('Turning irrigation ON')
-                                # irrigation.on()
+                                db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                                irrigation.on()
                                 time.sleep(duration_irrigation)
                                 log.info('Turning irrigation OFF')
-                                # irrigation.off()
+                                irrigation.off()
                             else:
                                 log.info(
                                     'Moisture reading above moisture threshold. NO irrigation')
@@ -287,10 +300,11 @@ class IrrigationControl:
                                 log.info(
                                     'Moisture reading below moisture threshold')
                                 log.info('Turning irrigation ON')
-                                # irrigation.on()
+                                db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                                irrigation.on()
                                 time.sleep(duration_irrigation)
                                 log.info('Turning irrigation OFF')
-                                # irrigation.off()
+                                irrigation.off()
                             else:
                                 log.info(
                                     'Moisture reading above moisture threshold. NO irrigation')
@@ -302,10 +316,11 @@ class IrrigationControl:
                                 log.info(
                                     'Moisture reading below moisture threshold')
                                 log.info('Turning irrigation ON')
-                                # irrigation.on()
+                                db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                                irrigation.on()
                                 time.sleep(duration_irrigation)
                                 log.info('Turning irrigation OFF')
-                                # irrigation.off()
+                                irrigation.off()
                             else:
                                 log.info(
                                     'Moisture reading above moisture threshold. NO irrigation')
@@ -320,10 +335,11 @@ class IrrigationControl:
                             log.info(
                                 'Moisture reading below moisture threshold')
                             log.info('Turning irrigation ON')
-                            # irrigation.on()
+                            db.log2database('Irrigation', 'info', 'Irrigation based on "Zeit- und Bodenfeuchtesteuerung"')
+                            irrigation.on()
                             time.sleep(duration_irrigation)
                             log.info('Turning irrigation OFF')
-                            # irrigation.off()
+                            irrigation.off()
                         else:
                             log.info(
                                 'Moisture reading above moisture threshold. NO irrigation')

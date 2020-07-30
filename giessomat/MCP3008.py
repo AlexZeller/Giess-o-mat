@@ -40,9 +40,10 @@ class MCP3008:
         try:
             adc = self.spi.xfer2([1, (8+channel)<<4, 0])   
             data = ((adc[1] & 3) << 8 ) + adc[2]
-            log.debug('Read channel ' + channel + ' from MCP3008')
+            log.debug('Read channel ' + str(channel) + ' from MCP3008')
             return data
         except: 
+            raise
             log.error('Error reading MCP3008')
 
     def convert_to_volts(self, data, places):
@@ -62,6 +63,7 @@ if __name__ == "__main__":
 
     try:
         channel = sys.argv[1]
+        print(channel)
         print('Reading MCP3008 values of channel {}, press Ctrl-C to quit...'.format(channel))
     
         while True:
