@@ -2,6 +2,10 @@ import MCP3008
 import math
 import sys
 from time import sleep
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 class Photoresistor:
 
@@ -10,10 +14,14 @@ class Photoresistor:
 
     def get_lux(self):
         adc = MCP3008.MCP3008()
-        reading =adc.read_channel(self.channel)
-        voltage = adc.convert_to_volts(reading, 4)
-        lux = 322*voltage**2+719*voltage+187
-        return int(lux)
+        try:
+            reading =adc.read_channel(self.channel)
+            voltage = adc.convert_to_volts(reading, 4)
+            lux = 322*voltage**2+719*voltage+187
+            log.debug('Converted MCP3008 reading to LUX')
+            return int(lux)
+        except:
+            log.error('Error getting reading LUX reading')
 
 if __name__ == "__main__":
 

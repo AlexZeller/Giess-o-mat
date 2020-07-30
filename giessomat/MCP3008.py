@@ -1,6 +1,10 @@
 from spidev import SpiDev
 from time import sleep
 import sys
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 class MCP3008:
     """ 
@@ -33,10 +37,13 @@ class MCP3008:
         Arguments: 
             channel (int): The channel to be read out.
         """
-
-        adc = self.spi.xfer2([1, (8+channel)<<4, 0])   
-        data = ((adc[1] & 3) << 8 ) + adc[2]
-        return data
+        try:
+            adc = self.spi.xfer2([1, (8+channel)<<4, 0])   
+            data = ((adc[1] & 3) << 8 ) + adc[2]
+            log.debug('Read channel ' + channel + ' from MCP3008')
+            return data
+        except: 
+            log.error('Error reading MCP3008')
 
     def convert_to_volts(self, data, places):
         """ 

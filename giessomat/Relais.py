@@ -1,5 +1,9 @@
 import RPi.GPIO as GPIO
 import sys
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 
 class Relais:
@@ -29,6 +33,7 @@ class Relais:
 
         GPIO.output(self.gpio_pin, GPIO.HIGH)
         self.status = True
+        log.debug('Switched Relais on GPIO ' + self.gpio_pin + ' on')
 
     def off(self):
         """ 
@@ -37,7 +42,7 @@ class Relais:
 
         GPIO.output(self.gpio_pin, GPIO.LOW)
         self.status = False
-        # GPIO.cleanup()
+        log.debug('Switched Relais on GPIO ' + self.gpio_pin + ' off')
 
     def get_status(self):
         """ 

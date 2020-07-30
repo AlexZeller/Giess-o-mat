@@ -2,6 +2,10 @@ import MCP3008
 import math
 import sys
 from time import sleep
+import logging
+
+# Set up logging
+log = logging.getLogger(__name__)
 
 class SoilMoisture:
 
@@ -9,11 +13,15 @@ class SoilMoisture:
         self.channel = mcp3008_channel
 
     def get_volumetric_water_content(self):
-        adc = MCP3008.MCP3008()
-        reading =adc.read_channel(self.channel)
-        voltage = adc.convert_to_volts(reading, 4)
-        vwc = ((1+16.103*voltage-(38.725*voltage)**2+(60.881*voltage)**3-(46.032*voltage)**4+(13.536*voltage)**5)-1.3)/6.1
-        return round(vwc,4)
+        try:
+            adc = MCP3008.MCP3008()
+            reading =adc.read_channel(self.channel)
+            voltage = adc.convert_to_volts(reading, 4)
+            vwc = ((1+16.103*voltage-(38.725*voltage)**2+(60.881*voltage)**3-(46.032*voltage)**4+(13.536*voltage)**5)-1.3)/6.1
+            log.debug('Converted MCP3008 reading to volumetric soil moisture')
+            return round(vwc,4)
+        except:
+            log.error('Error getting soil moisture reading')
 
 if __name__ == "__main__":
 

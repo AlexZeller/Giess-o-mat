@@ -1,4 +1,3 @@
-- Add logging to all modules (MCP, Photoresistor, Relais, SoilMoisture)
 - Database method to write control actions to separate table & add messages to modules
 - soil moisture conversion? 
 - test and debug
