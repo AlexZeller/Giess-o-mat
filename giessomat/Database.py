@@ -149,7 +149,7 @@ class Database:
 if __name__ == "__main__":
     try:
         db = Database('/home/pi/Giess-o-mat/giessomat_db.db')
-        #db.sensordata2database()
-        db.log2database('Ventilation', 'info', 'Nachtruhe. Fans off.')
+        db.sensordata2database()
+        #db.log2database('Ventilation', 'info', 'Nachtruhe. Fans off.')
     except:
         raise

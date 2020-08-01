@@ -4,6 +4,7 @@ import signal
 import sys
 import json
 import logging
+import psutil
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -62,9 +63,10 @@ class Fans:
         try:
             os.kill(pid, signal.SIGTERM)
             log.debug('Killed subprocess to stop fans')
+            subprocess.Popen(['python', self.l298n, 'stop'])
         except:
             log.debug('No such subprocess')
-        subprocess.Popen(['python', self.l298n, 'stop'])
+        
 
     def change_speed(self, speed):
         """ 
@@ -82,6 +84,20 @@ class Fans:
             f.seek(0)
             f.write(json.dumps(json_data))
             f.truncate()
+
+    def get_status(self):
+        """ 
+        Check if fans are running.
+
+        """
+        with open(self.json, 'r') as f:
+            json_data = json.load(f)
+            pid = json_data["fans"]
+        if psutil.pid_exists(pid):
+            return True
+        else:
+            return False
+
 
 
 if __name__ == "__main__":
