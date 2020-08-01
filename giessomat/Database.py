@@ -7,6 +7,7 @@ import HCSR04
 import DC18B20
 import MCP3008
 import Photoresistor
+import SoilMoisture
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -97,10 +98,13 @@ class Database:
             soil_temp = dc18b20.get_temperature()
 
             # Sensor value from MCP3008 channel X (soil humidity)
-            soil_humid = 9999
+            soilmoisture = SoilMoisture.SoilMoisture(0)
+            soil_humid = soilmoisture.get_volumetric_water_content()
+           
 
             # Sensor value from MCP3008 channel Y (lux)
-            lux = 9999
+            photoresistor = Photoresistor.Photoresistor(7)
+            lux = photoresistor.get_lux()
 
             # Sensor value from HC-SR04 (water level)
             hcsr04 = HCSR04.HCSR04(gpios_hcsr04[0], gpios_hcsr04[1])
