@@ -44,7 +44,7 @@ class MCP3008:
             return data
         except: 
             raise
-            log.error('Error reading MCP3008')
+            log.exception('Error reading MCP3008')
 
     def convert_to_volts(self, data, places):
         """ 

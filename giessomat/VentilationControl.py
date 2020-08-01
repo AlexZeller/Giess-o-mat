@@ -114,7 +114,7 @@ class VentilationControl:
                     fans.stop_fans()
 
             else:
-                log.error('Mode not recognised')
+                log.exception('Mode not recognised')
 
 
 if __name__ == "__main__":

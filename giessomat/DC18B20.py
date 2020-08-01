@@ -42,7 +42,7 @@ class DC18B20:
             return(temperature)
             log.debug('Read temperature values from DS1820b')
         except:
-            log.error('Error reading temperature values from DS1820b')
+            log.exception('Error reading temperature values from DS1820b')
 
 
 if __name__ == "__main__":

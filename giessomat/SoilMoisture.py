@@ -21,7 +21,7 @@ class SoilMoisture:
             log.debug('Converted MCP3008 reading to volumetric soil moisture')
             return round(vwc,4)
         except:
-            log.error('Error getting soil moisture reading')
+            log.exception('Error getting soil moisture reading')
 
 if __name__ == "__main__":
 

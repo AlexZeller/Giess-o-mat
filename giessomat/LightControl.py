@@ -75,7 +75,7 @@ class LightControl:
             log.info('Mode: Zeitsteuerung')
             if self.check_if_time_inbetween(start_time, end_time):
                 log.info('In between set time. Light on.')
-                db.log2database('Light', 'info', 'In between set time. Light on')
+                db.log2database('Light', 'action', 'In between set time. Light on')
                 light.on()
             else:
                 log.info('Not in between set time. Light off.')
@@ -85,14 +85,14 @@ class LightControl:
             log.info('Mode: Zeit- und Helligkeitssteuerung')
             if self.check_if_time_inbetween(start_time, end_time) and lux_reading < lux_threshold:
                 log.info('Lux reading under threshold. Light on.')
-                db.log2database('Light', 'info', 'Lux reading under threshold. Light on')
+                db.log2database('Light', 'action', 'Lux reading under threshold. Light on')
                 light.on()
             else:
                 log.info('Lux reading above threshold. Light off.')
                 db.log2database('Light', 'info', 'Lux reading above threshold. Light off')
                 light.off()
         else:
-            log.error('Mode not recognised')
+            log.exception('Mode not recognised')
 
 
 if __name__ == "__main__":

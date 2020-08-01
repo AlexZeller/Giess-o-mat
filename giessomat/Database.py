@@ -59,7 +59,7 @@ class Database:
             self.cur.execute(create_log_table_sql)
             log.debug('Connected to database')
         except sqlite3.Error as e:
-            log.error('Error connecting to database')
+            log.exception('Error connecting to database')
             print(e)
 
     def executeSQL(self, sql, par):
@@ -109,7 +109,7 @@ class Database:
             log.debug('Sucessfully read sensor values')
             return Ta, RH, soil_temp, soil_humid, lux, waterlevel
         except:
-            log.error('Error reading sensor values')
+            log.exception('Error reading sensor values')
 
     def sensordata2database(self):
         """
@@ -122,7 +122,7 @@ class Database:
             self.executeSQL(sql, sensordata)
             log.info('Wrote sensor values to database')
         except:
-            log.error('Error writing sensor values to database')
+            log.exception('Error writing sensor values to database')
 
     def log2database(self, topic, level, message):
         """
@@ -139,7 +139,7 @@ class Database:
             self.executeSQL(sql, (topic, level, message))
             log.debug('Wrote log to database')
         except:
-            log.error('Error writing log to database')
+            log.exception('Error writing log to database')
 
 
 if __name__ == "__main__":

@@ -21,7 +21,7 @@ class Photoresistor:
             log.debug('Converted MCP3008 reading to LUX')
             return int(lux)
         except:
-            log.error('Error getting reading LUX reading')
+            log.exception('Error getting reading LUX reading')
 
 if __name__ == "__main__":
 

@@ -35,7 +35,7 @@ class DHT22:
             temperature = round(values[1], 2)
             return temperature
         except:
-            log.error('Failed to read DHT22 temperature value')
+            log.exception('Failed to read DHT22 temperature value')
 
 
     def get_humidity(self):
@@ -48,7 +48,7 @@ class DHT22:
             humidity = round(values[0], 2)
             return humidity
         except:
-            log.error('Failed to read DHT22 humidity value')
+            log.exception('Failed to read DHT22 humidity value')
 
 
 if __name__ == "__main__":
