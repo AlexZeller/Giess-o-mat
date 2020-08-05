@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import sys
+import time
 
 
 class L298n:
@@ -44,6 +45,7 @@ class L298n:
             GPIO.output(self.in1, GPIO.HIGH)
             GPIO.output(self.in2, GPIO.LOW)
             self.pwm.start(percentage)
+            time.sleep(1)
 
     def stop(self):
         """ 
