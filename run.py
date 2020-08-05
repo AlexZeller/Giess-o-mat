@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import TimedRotatingFileHandler
 from giessomat import Database
 from giessomat import LightControl
 from giessomat import VentilationControl
@@ -8,6 +9,8 @@ from giessomat import IrrigationControl
 logging.basicConfig(filename='giessomat.log', filemode='a', level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
 log = logging.getLogger(__name__)
+handler = TimedRotatingFileHandler("giessomat.log", when="midnight", interval=1, backupCount=14)
+log.addHandler(handler)
 
 log.info('Starting run...')
 
