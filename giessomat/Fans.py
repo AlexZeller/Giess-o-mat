@@ -61,10 +61,13 @@ class Fans:
             json_data = json.load(f)
             pid = json_data["fans"]
         try:
-            os.kill(pid, signal.SIGTERM)
-            log.debug('Killed subprocess to stop fans')
             subprocess.Popen(['python', self.l298n, 'stop'])
+            p = psutil.Process(pid)
+            p.kill()
+            #os.kill(pid, signal.SIGTERM)
+            log.debug('Killed subprocess to stop fans')       
         except:
+            raise
             log.debug('No such subprocess')
         
 
@@ -93,10 +96,11 @@ class Fans:
         with open(self.json, 'r') as f:
             json_data = json.load(f)
             pid = json_data["fans"]
-        if psutil.pid_exists(pid):
-            return True
-        else:
+        p = psutil.Process(pid=pid)
+        if p.status() == psutil.STATUS_ZOMBIE:
             return False
+        else:
+            return True
 
 
 

@@ -1,2 +1,6 @@
+- check relais status before turning them on/off
+- check log2db for forced sensor reading
+- feedback for forced sensor reading 
+- get rid of zombie process
 - soil moisture conversion? 
 - test and debug

@@ -85,7 +85,14 @@ class VentilationControl:
                 if Ta > Ta_threshold:
                     log.info('Ta > Threshold. Turning Fans on')
                     db.log2database('Ventilation', 'info', 'Ta > Threshold. Turning Fans on')
+<<<<<<< HEAD
                     fans.start_fans(15)
+=======
+                    if fans.get_status():
+                        return
+                    else:
+                        fans.start_fans(50)
+>>>>>>> 3e9e2b150c552901bb6889c5f32ae80ad1402fb9
                 else:
                     log.info('Ta < Threshold. Fans off')
                     db.log2database('Ventilation', 'info', 'Ta < Threshold. Fans off')
@@ -96,7 +103,14 @@ class VentilationControl:
                 if Rh > Rh_threshold:
                     log.info('Rh > Threshold. Turning Fans on')
                     db.log2database('Ventilation', 'info', 'Rh > Threshold. Turning Fans on')
+<<<<<<< HEAD
                     fans.start_fans(15)
+=======
+                    if fans.get_status():
+                        return
+                    else:
+                        fans.start_fans(50)
+>>>>>>> 3e9e2b150c552901bb6889c5f32ae80ad1402fb9
                 else:
                     log.info('Rh < Threshold. Fans off')
                     db.log2database('Ventilation', 'info', 'Rh < Threshold. Fans off')
@@ -107,7 +121,14 @@ class VentilationControl:
                 if Rh > Rh_threshold or Ta > Ta_threshold:
                     log.info('Rh or Ta > Threshold. Turning Fans on')
                     db.log2database('Ventilation', 'info', 'Rh or Ta > Threshold. Turning Fans on')
+<<<<<<< HEAD
                     fans.start_fans(15)
+=======
+                    if fans.get_status():
+                        return
+                    else:
+                        fans.start_fans(50)
+>>>>>>> 3e9e2b150c552901bb6889c5f32ae80ad1402fb9
                 else:
                     log.info('Rh or Ta < Threshold. Fans off')
                     db.log2database('Ventilation', 'info', 'Rh or Ta < Threshold. Fans off')
