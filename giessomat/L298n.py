@@ -45,11 +45,7 @@ class L298n:
             GPIO.output(self.in1, GPIO.HIGH)
             GPIO.output(self.in2, GPIO.LOW)
             self.pwm.start(percentage)
-<<<<<<< HEAD
-            time.sleep(100000)
-=======
             time.sleep(1)
->>>>>>> 3e9e2b150c552901bb6889c5f32ae80ad1402fb9
 
     def stop(self):
         """ 

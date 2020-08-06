@@ -14,7 +14,7 @@ class DC18B20:
         sensor_id (str): Id of the sensor.  
     """
 
-    def __init__(self, sensor_id='28-0301a27973a0'):
+    def __init__(self, sensor_id='28-0301a2799317'):
         """
         The constructor for the DC18B20 class.
 

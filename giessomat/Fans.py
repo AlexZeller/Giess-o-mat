@@ -67,7 +67,6 @@ class Fans:
             #os.kill(pid, signal.SIGTERM)
             log.debug('Killed subprocess to stop fans')       
         except:
-            raise
             log.debug('No such subprocess')
         
 
