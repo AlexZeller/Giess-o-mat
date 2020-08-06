@@ -96,11 +96,15 @@ class Fans:
         with open(self.json, 'r') as f:
             json_data = json.load(f)
             pid = json_data["fans"]
-        p = psutil.Process(pid=pid)
-        if p.status() == psutil.STATUS_ZOMBIE:
-            return False
+        if psutil.pid_exists(pid):
+            p = psutil.Process(pid=pid)
+            if p.status() == psutil.STATUS_ZOMBIE:
+                return False
+            else:
+                return True
         else:
-            return True
+            return False
+
 
 
 
