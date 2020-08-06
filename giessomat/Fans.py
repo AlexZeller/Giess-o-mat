@@ -61,6 +61,7 @@ class Fans:
             json_data = json.load(f)
             pid = json_data["fans"]
         try:
+            subprocess.Popen(['python', self.l298n, 'stop'])
             p = psutil.Process(pid)
             p.kill()
             #os.kill(pid, signal.SIGTERM)
