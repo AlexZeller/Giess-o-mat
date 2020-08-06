@@ -84,7 +84,7 @@ class IrrigationControl:
             # in case times cross midnight
             return time >= current_time or current_time < time_buffer
 
-    def execute(self, GPIO=23, channel=0):
+    def execute(self, GPIO=24, channel=0):
         """
         Executes the main control function.
 
