@@ -32,7 +32,7 @@ class L298n:
         GPIO.setup(self.ena, GPIO.OUT)
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
-        self.pwm = GPIO.PWM(self.ena, 20500)
+        self.pwm = GPIO.PWM(self.ena, 20)
 
     def run(self, percentage):
         """ 
@@ -45,7 +45,11 @@ class L298n:
             GPIO.output(self.in1, GPIO.HIGH)
             GPIO.output(self.in2, GPIO.LOW)
             self.pwm.start(percentage)
+<<<<<<< HEAD
+            time.sleep(100000)
+=======
             time.sleep(1)
+>>>>>>> 3e9e2b150c552901bb6889c5f32ae80ad1402fb9
 
     def stop(self):
         """ 
@@ -67,7 +71,8 @@ if __name__ == "__main__":
         status = sys.argv[1]
         try:
             percentage = int(sys.argv[2])
-        except:
+            print(percentage)
+	except:
             pass
 
         l298 = L298n(in1_pin, in2_pin, ena_pin)

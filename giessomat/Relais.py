@@ -31,7 +31,7 @@ class Relais:
         Switches the Relais from NC to NO. 
         """
 
-        GPIO.output(self.gpio_pin, GPIO.HIGH)
+        GPIO.output(self.gpio_pin, GPIO.LOW)
         self.status = True
         log.debug('Switched Relais on GPIO ' + str(self.gpio_pin) + ' on')
 
@@ -40,7 +40,7 @@ class Relais:
         Switches the Relais from NC to NO. 
         """
 
-        GPIO.output(self.gpio_pin, GPIO.LOW)
+        GPIO.output(self.gpio_pin, GPIO.HIGH)
         self.status = False
         log.debug('Switched Relais on GPIO ' + str(self.gpio_pin) + ' off')
 
@@ -50,9 +50,9 @@ class Relais:
         """
 
         gpio_status = GPIO.input(self.gpio_pin)
-        if gpio_status == 1:
-            relais_status = True
         if gpio_status == 0:
+            relais_status = True
+        if gpio_status == 1:
             relais_status = False
         return relais_status
 

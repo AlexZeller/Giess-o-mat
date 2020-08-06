@@ -48,7 +48,7 @@ class LightControl:
             # in case times cross midnight
             return current_time > start_time or current_time < end_time
 
-    def execute(self, GPIO=16, channel=7):
+    def execute(self, GPIO=23, channel=7):
         """
         Executes the main control function.
 
